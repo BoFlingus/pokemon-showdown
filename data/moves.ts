@@ -22154,4 +22154,515 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-};
+	firemetronome: {
+  num: 10000,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Fire Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Fire' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Fire",
+},
+
+watermetronome: {
+  num: 10001,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Water Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Water' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Water",
+},
+
+electricmetronome: {
+  num: 10002,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Electric Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Electric' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Electric",
+},
+
+grassmetronome: {
+  num: 10003,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Grass Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Grass' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Grass",
+},
+
+icemetronome: {
+  num: 10004,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Ice Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Ice' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Ice",
+},
+
+fightingmetronome: {
+  num: 10005,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Fighting Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Fighting' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Fighting",
+},
+
+poisonmetronome: {
+  num: 10006,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Poison Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Poison' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Poison",
+},
+
+groundmetronome: {
+  num: 10007,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Ground Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Ground' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Ground",
+},
+
+flyingmetronome: {
+  num: 10008,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Flying Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Flying' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Flying",
+},
+
+psychicmetronome: {
+  num: 10009,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Psychic Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Psychic' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Psychic",
+},
+
+bugmetronome: {
+  num: 10010,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Bug Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Bug' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Bug",
+},
+
+rockmetronome: {
+  num: 10011,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Rock Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Rock' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Rock",
+},
+
+ghostmetronome: {
+  num: 10012,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Ghost Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Ghost' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Ghost",
+},
+
+dragonmetronome: {
+  num: 10013,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Dragon Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Dragon' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Dragon",
+},
+
+darkmetronome: {
+  num: 10014,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Dark Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Dark' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Dark",
+},
+
+steelmetronome: {
+  num: 10015,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Steel Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Steel' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Steel",
+},
+
+fairymetronome: {
+  num: 10016,
+  accuracy: true,
+  basePower: 0,
+  category: "Status",
+  name: "Fairy Metronome",
+  pp: 10,
+  priority: 0,
+  flags: {},
+  onHit(target, source, move) {
+    const moves = source.battle.dex.moves.all().filter(m =>
+      m.gen <= source.battle.gen &&
+      m.type === 'Fairy' &&
+      !m.isZ &&
+      !m.isMax &&
+      !m.realMove?.startsWith('hiddenpower') &&
+      m.id !== move.id
+    );
+    if (!moves.length) {
+      this.add('-fail', source);
+      return false;
+    }
+    const randomMove = this.sample(moves);
+    this.actions.useMove(randomMove, target);
+  },
+  secondary: null,
+  target: "self",
+  type: "Fairy",
+},
+
+}
+
