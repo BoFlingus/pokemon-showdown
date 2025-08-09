@@ -2281,4 +2281,15 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		activate: "  [POKEMON] extends [MOVE] by 2 turns!",
 	},
+	energized: {
+		name: "Energized",
+		desc: "Pokemon gains Charge every other turn. If it uses a move where it has to rest the next turn (like Hyper Beam), the charge is consumed instead. ",
+		shortDesc: "Gain charge every other turn, recharge moves consume charge, and dont need recharge turn",
+	},
+	lifetap: {
+		name: "Life Tap",
+		desc: "Pokemon restores HP for damage done to opponent by Curse",
+		shortDesc: "Pokemon restores HP for damage done to opponent by Curse",
+	},
 };
+

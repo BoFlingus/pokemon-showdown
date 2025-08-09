@@ -5644,4 +5644,268 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: -3,
 	},
-};
+
+  energized: {
+    name: "Energized",
+    shortDesc: "Charges every other turn. If charged, skips recharge turns.",
+    onStart(pokemon) {
+      pokemon.addVolatile('energized');
+    },
+    condition: {
+      onStart(pokemon) {
+        this.effectState.counter = 1;
+        this.effectState.charged = false;
+      },
+      onResidual(pokemon) {
+        this.effectState.counter++;
+        if (this.effectState.counter >= 2) {
+          this.effectState.counter = 0;
+          this.effectState.charged = true;
+          this.add('-message', `${pokemon.name} is energized!`);
+        }
+      },
+      onBeforeMove(pokemon) {
+        if (pokemon.volatiles['mustrecharge'] && this.effectState.charged) {
+          pokemon.removeVolatile('mustrecharge');
+          this.effectState.charged = false;
+          this.add('-message', `${pokemon.name} used its energy to skip recharging!`);
+        }
+      },
+    },
+    rating: 3,
+    num: 8000,
+  },
+lifetap: {
+	onResidualOrder: 28,
+	onResidualSubOrder: 2,
+	onResidual(pokemon) {
+		if (!pokemon.hp) return;
+		for (const target of pokemon.foes()) {
+			if (target.volatiles['curse'] || target.hasAbility('cursedbody')) {
+				this.heal(pokemon.baseMaxhp / 4, pokemon, target); // heal self from cursed enemy
+			}
+		}
+	},
+	flags: {},
+	name: "Life Tap",
+	rating: 1.5,
+	num: 8001,
+},
+pyrotechnic: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Pyrotechic boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Pyrotechnic boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Pyrotechnic",
+		rating: 3.5,
+		num: 8002,
+	},
+premonition: {
+	onStart(pokemon) {
+		// Pick a foe (can be randomized or customized later)
+		const target = pokemon.foes()[0];
+		if (!target) return;
+
+		// Add the futuremove slot condition
+		if (!target.side.addSlotCondition(target, 'futuremove', pokemon)) return;
+
+		// Assign the move data for Future Sight
+		Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+			duration: 3,
+			move: 'futuresight',
+			source: pokemon,
+			moveData: {
+				id: 'futuresight',
+				name: "Future Sight",
+				accuracy: 100,
+				basePower: 120,
+				category: "Special",
+				priority: 0,
+				flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+				ignoreImmunity: false,
+				type: 'Psychic',
+				effectType: 'Move',
+			},
+		});
+
+		// Show animation message
+		this.add('-start', pokemon, 'move: Future Sight');
+	},
+	flags: {},
+	name: "Premonition",
+	rating: 4,
+	num: 8003,
+},
+	
+sugarrush: {
+	onEatItem(item, pokemon) {
+		// Optional: Only trigger for berries
+		if (!item.isBerry) return;
+
+		this.add('-activate', pokemon, 'ability: Sugar Rush', '[consumed item]', item.name);
+		this.boost({ atk: 1, spe: 1 }, pokemon, pokemon);
+	},
+	flags: {},
+	name: "Sugar Rush",
+	rating: 2,
+	num: 8004,
+},
+springystep: {
+	onAfterMove(pokemon, target, move) {
+		const kickMoves = new Set([
+			'jumpkick',
+			'highjumpkick',
+			'blazekick',
+			'triplekick',
+			'lowkick',
+			'tropkick',
+			'doublekick',
+			'rollingkick',
+			'stomp',
+			'stompingtantrum',
+			'axe kick',
+			'bounce',
+			'tripleaxel', 
+			'highhorsepower',
+		]);
+
+		if (!move || !kickMoves.has(move.id)) return;
+
+		if (!pokemon.volatiles['charge']) {
+			pokemon.addVolatile('charge');
+			this.add('-activate', pokemon, 'ability: Springy Step');
+		}
+	},
+	flags: {},
+	name: "Springy Step",
+	rating: 2.5,
+	num: 8005,
+},
+overheal: {
+	onAfterHeal(damage, target, source, effect) {
+		// Only trigger if the Pokémon is at full HP after healing
+		if (target.hp < target.maxhp) return;
+
+		// Pick one of the defensive stats at random
+		const stat = this.sample(['def', 'spd']);
+		this.boost({ [stat]: 1 }, target, target);
+		this.add('-activate', target, 'ability: Overheal');
+	},
+	flags: {},
+	name: "Overheal",
+	rating: 3,
+	num: 8006,
+},
+peakperformance: {
+	onModifyAtk(atk, pokemon) {
+		if (pokemon.hp === pokemon.maxhp) {
+			return this.chainModify(1.2);
+		}
+	},
+	onModifyDef(def, pokemon) {
+		if (pokemon.hp === pokemon.maxhp) {
+			return this.chainModify(1.2);
+		}
+	},
+	onModifySpA(spa, pokemon) {
+		if (pokemon.hp === pokemon.maxhp) {
+			return this.chainModify(1.2);
+		}
+	},
+	onModifySpD(spd, pokemon) {
+		if (pokemon.hp === pokemon.maxhp) {
+			return this.chainModify(1.2);
+		}
+	},
+	onModifySpe(spe, pokemon) {
+		if (pokemon.hp === pokemon.maxhp) {
+			return this.chainModify(1.2);
+		}
+	},
+	name: "Peak Performance",
+	rating: 4,
+	num: 8007,
+},
+floodlights: {
+	// This makes all moves hit while this Pokémon is active
+	onAnyAccuracy(accuracy, target, source, move) {
+		// If the source of the move is not in battle, do nothing
+		if (!this.effectState.target.isActive) return;
+
+		// Set move to always hit
+		return true;
+	},
+	name: "Floodlights",
+	rating: 4.5,
+	num: 8008,
+},
+consumption: {
+	onAfterMoveSecondarySelf(pokemon, target, move) {
+		// Only trigger on biting moves
+		const bitingMoves = new Set([
+			'bite', 'crunch', 'firefang', 'icefang', 'thunderfang', 'jawlock',
+			'snarl', 'superfang', 'nightslash', 'suckerpunch', 'bite', // include more if you want
+		]);
+		if (!bitingMoves.has(move.id)) return;
+
+		// If target has no item or user already copied it, do nothing
+		if (!target.item || pokemon.hasItem(target.item)) return;
+
+		// Remove target's item
+		const item = target.item;
+		target.setItem('');
+
+		// Add volatile for the copied item
+		if (!pokemon.volatiles.consumeditems) {
+			pokemon.addVolatile('consumeditems');
+			pokemon.volatiles.consumeditems.items = [];
+		}
+
+		// Store item info to volatiles for effect
+		if (!pokemon.volatiles.consumeditems.items.includes(item)) {
+			pokemon.volatiles.consumeditems.items.push(item);
+		}
+
+		this.add('-activate', pokemon, 'ability: Consumption');
+	},
+	onSwitchOut(pokemon) {
+		// Clear copied items on switchout
+		delete pokemon.volatiles.consumeditems;
+	},
+	condition: {
+		onStart(pokemon) {
+			// Apply effects of all consumed items here, e.g. Leftovers healing, etc.
+			// You'll need to define how to handle each item's effect,
+			// or trigger their effects in appropriate hooks (e.g., onResidual)
+		},
+		onResidual(pokemon) {
+			const consumed = pokemon.volatiles.consumeditems;
+			if (!consumed || !consumed.items.length) return;
+
+			for (const itemid of consumed.items) {
+				// Example: if item is Leftovers, heal 1/16 HP
+				if (itemid === 'leftovers') {
+					this.heal(pokemon.baseMaxhp / 16, pokemon);
+				}
+				// Add more item effects here as needed
+			}
+		},
+	},
+	flags: {},
+	name: "Consumption",
+	rating: 4,
+	num: 8009,
+},
+}
+

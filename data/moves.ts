@@ -2354,7 +2354,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon, source, effect) {
 				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
-					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
+					this.add('-start', pokemon, 'Charge',  	this.activeMove!.name, '[from] ability: ' + effect.name);
 				} else {
 					this.add('-start', pokemon, 'Charge');
 				}
@@ -22663,6 +22663,230 @@ fairymetronome: {
   target: "self",
   type: "Fairy",
 },
-
+jiffyjolt: {
+		num: 8001,
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		name: "Jiffy Jolt",
+		pp: 30,
+		priority: 1,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+		contestType: "Cool",
+	},
+shishquibab: {
+		num: 8002,
+		accuracy: 80,
+		basePower: 150,
+		category: "Physical",
+		name: "Shishquibab",
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1, recharge: 1, protect: 1, mirror: 1, metronome: 1 },
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water') return 1;
+		},
+		self: {
+			volatileStatus: 'mustrecharge',
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+		contestType: "Tough"
+	},
+	halfgambit: {
+		num: 8003,
+		accuracy: 100,
+		basePower: 0,
+		damageCallback(pokemon) {
+			const damage = pokemon.hp/2;
+			pokemon.sethp(pokemon.hp/2);
+			return damage;
+		},
+		selfdestruct: "ifHit",
+		category: "Special",
+		name: "Half Gambit",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, metronome: 1, noparentalbond: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+		zMove: { basePower: 180 },
+		contestType: "Tough",
+	},
+	quartergambit: {
+		num: 8004,
+		accuracy: 100,
+		basePower: 0,
+		damageCallback(pokemon) {
+			const damage = pokemon.hp/4;
+			pokemon.sethp(pokemon.hp/4);
+			return damage;
+		},
+		selfdestruct: "ifHit",
+		category: "Special",
+		name: "Quarter Gambit",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, metronome: 1, noparentalbond: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+		zMove: { basePower: 180 },
+		contestType: "Tough",
+	},
+	tractorbeam: {
+		num: 8005,
+		accuracy: 100,
+		basePower: 50,
+		category: "Special",
+		name: "Tractor Beam",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		beforeTurnCallback(pokemon) {
+			for (const side of this.sides) {
+				if (side.hasAlly(pokemon)) continue;
+				side.addSideCondition('pursuit', pokemon);
+				const data = side.getSideConditionData('pursuit');
+				if (!data.sources) {
+					data.sources = [];
+				}
+				data.sources.push(pokemon);
+			}
+		},
+		onModifyMove(move, source, target) {
+			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
+		},
+		onTryHit(target, pokemon) {
+			target.side.removeSideCondition('pursuit');
+		},
+		condition: {
+			duration: 1,
+			onBeforeSwitchOut(pokemon) {
+				this.debug('Pursuit start');
+				let alreadyAdded = false;
+				pokemon.removeVolatile('destinybond');
+				for (const source of this.effectState.sources) {
+					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
+					if (!alreadyAdded) {
+						this.add('-activate', pokemon, 'move: Pursuit');
+						alreadyAdded = true;
+					}
+					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
+					// If it is, then Mega Evolve before moving.
+					if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+						for (const [actionIndex, action] of this.queue.entries()) {
+							if (action.pokemon === source) {
+								if (action.choice === 'megaEvo') {
+									this.actions.runMegaEvo(source);
+								} else if (action.choice === 'terastallize') {
+									// Also a "forme" change that happens before moves, though only possible in NatDex
+									this.actions.terastallize(source);
+								} else {
+									continue;
+								}
+								this.queue.list.splice(actionIndex, 1);
+								break;
+							}
+						}
+					}
+					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+		contestType: "Clever",
+	},
+	disturbance: {
+		num: 8006,
+		accuracy: 100,
+		basePower: 30,
+		category: "Special",
+		name: "Disturbance",
+		pp: 30,
+		priority: 3,
+		flags: { sound: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Normal",
+		contestType: "Cute",
+	},
+	metalmunch: {
+		num: 8007,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Metal Munch",
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel') return 1;
+		},
+		target: "normal",
+		type: "Bug",
+		contestType: "Beautiful",
+	},
+	deepfreeze: {
+		num: 8008,
+		accuracy: 50,
+		basePower: 100,
+		category: "Special",
+		name: "Deep Freeze",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		secondary: {
+			chance: 100,
+			status: 'frz',
+		},
+		target: "normal",
+		type: "Ice",
+		contestType: "Cool",
+	},
+	deathspore: {
+		num: 8009,
+		accuracy: 30,
+		basePower: 0,
+		category: "Special",
+		name: "Death Spore",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, powder: 1 },
+		ohko: true,
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+		zMove: { basePower: 180 },
+		maxMove: { basePower: 130 },
+		contestType: "Tough",
+	},
+	coalescence: {
+		num: 8010,
+		accuracy: 95,
+		basePower: 100,
+		category: "Physical",
+		name: "Coalescence",
+		pp: 10,
+		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1 },
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Ice', type);
+		},
+		priority: 0,
+		secondary: null,
+		target: "any",
+		type: "Fire",
+		zMove: { basePower: 170 },
+		contestType: "Tough",
+	},
 }
-

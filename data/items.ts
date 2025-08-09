@@ -7692,4 +7692,33 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
+	madhoney: {
+		name: "Mad Honey",
+		spritenum: 286,
+		onUpdate(pokemon) {
+			if (pokemon.useItem()) {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		boosts: {
+			atk: 2,
+		},
+		num: 8000,
+		gen: 2,
+	},
+	compoundlens: {
+		name: "Compound Lens",
+		fling: {
+			basePower: 60,
+		},
+		spritenum: 359,
+		onModifyCritRatio(critRatio, user) {
+			if (this.toID(user.baseSpecies.baseSpecies) === 'daggerbak') {
+				return critRatio + 2;
+			}
+		},
+		itemUser: ["Daggerbak"],
+		num: 8001,
+		gen: 2,
+	},
 };

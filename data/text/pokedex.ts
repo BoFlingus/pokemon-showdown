@@ -3767,4 +3767,19 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	pokestarufopropu2: {
 		name: "Pokestar UFO-PropU2",
 	},
+	quarbuncle: {
+		name: "Quarbuncle"
+	},
+	krakebab: {
+		name: "Krakebab"
+	},
+	swindelaff: {
+		name: "Swindelaff"
+	},
+	vulcamagnon: {
+		name: "Vulcamagnon"
+	},
+	brilliamax: {
+		name: "Brilliamax"
+	},
 };

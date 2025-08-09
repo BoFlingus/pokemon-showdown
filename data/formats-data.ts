@@ -1,3 +1,5 @@
+import { Z_UNKNOWN } from 'node:zlib';
+
 export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable = {
 	bulbasaur: {
 		tier: "LC",
@@ -34,6 +36,10 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "UUBL",
+	},
+	quarbuncle: {
+		tier:'ZU',
+		natDexTier: "OU",
 	},
 	charizardmegay: {
 		isNonstandard: "Past",
@@ -6048,4 +6054,5 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
+	
 };

@@ -1759,7 +1759,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Stick",
 		shortDesc: "If held by a Farfetch’d, its critical hit ratio is raised by 2 stages.",
 		gen2: {
-			shortDesc: "If held by a Farfetch’d, its critical hit ratio is always at stage 2. (25% crit rate)",
+			shortDesc: "If held by a Farfetch’d, its critical hit ratio is always at stage 2`. (25% crit rate)",
 		},
 	},
 	stickybarb: {
@@ -2436,5 +2436,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	vilevial: {
 		name: "Vile Vial",
 		shortDesc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
+	},
+	madhoney: {
+		name: "Mad Honey",
+		shortDesc: "On switch-in, raises holder's Attack by 2 and confuses it. Single use."
+	},
+	compoundlens: {
+		nameL: "Compound Lens",
+		shortDesc: "If held by a Farfetch’d, its critical hit ratio is raised by 2 stages.",
 	},
 };

@@ -7608,4 +7608,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Nearly always goes first. Always crits.",
 		},
 	},
+	jiffyjolt: {
+		name: "Jiffy Jolt",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	deepfreeze: {
+		name: "Deep Freeze",
+		desc: "Has a 100% chance to paralyze the target.",
+		shortDesc: "100% chance to paralyze the target.",
+	},
+	coalescence: {
+		name: "Coalescence",
+		desc: "This move combines Ice in its type effectiveness against the target.",
+		shortDesc: "Combines Ice in its type effectiveness.",
+	},
 };

@@ -887,4 +887,37 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return bp;
 		},
 	},
+	energizedcounter: {
+  onStart(pokemon) {
+    this.effectState.counter = 0;
+  },
+	},
+energized: {
+  noCopy: true,
+  onStart(pokemon) {
+    this.effectState.turnCounter = 0;
+  },
+  onResidual(pokemon) {
+    this.effectState.turnCounter++;
+    if (this.effectState.turnCounter >= 2) {
+      this.effectState.turnCounter = 0;
+      // Apply the regular Charge effect
+      pokemon.addVolatile('charge');
+      this.add('-message', `${pokemon.name} became charged with energy!`);
+    }
+  },
+  onAfterMove(pokemon, target, move) {
+
+  // Check if the move would normally force recharge
+  if (move.self && move.self.volatileStatus === 'mustrecharge') {
+    if (pokemon.volatiles['charge']) {
+      // Prevent the recharge from happening
+      pokemon.removeVolatile('mustrecharge');
+      pokemon.removeVolatile('charge'); // consume the charge
+      this.add('-message', `${pokemon.name} consumed its stored energy to keep attacking!`);
+    }
+  }
+},
+
+},
 };

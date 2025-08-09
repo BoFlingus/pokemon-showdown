@@ -114,4 +114,35 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1, cantsuppress: 1 },
 	},
+	  energized: {
+    name: "Energized",
+    shortDesc: "Charges every other turn. If charged, skips recharge turns.",
+    onStart(pokemon) {
+      pokemon.addVolatile('charge');
+    },
+    condition: {
+      onStart(pokemon) {
+        this.effectState.counter = 1;
+        this.effectState.charged = false;
+      },
+      onResidual(pokemon) {
+        this.effectState.counter++;
+        if (this.effectState.counter >= 2) {
+          this.effectState.counter = 0;
+          this.effectState.charged = true;
+          this.add('-message', `${pokemon.name} is energized!`);
+        }
+      },
+      onBeforeMove(pokemon) {
+        if (pokemon.volatiles['mustrecharge'] && this.effectState.charged) {
+          pokemon.removeVolatile('mustrecharge');
+          this.effectState.charged = false;
+          this.add('-message', `${pokemon.name} used its energy to skip recharging!`);
+        }
+      },
+    },
+    rating: 3,
+    num: -11123
+  },
+
 };
