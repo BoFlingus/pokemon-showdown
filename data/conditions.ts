@@ -918,6 +918,71 @@ energized: {
     }
   }
 },
+},
+glacialspikes: {
+	name: "Glacial Spikes",
+	effectType: 'SideCondition',
+	onSideStart(side) {
+		this.add('-sidestart', side, 'Glacial Spikes');
+		this.effectState.layers = 1;
+		this.add('message', `Shards of ice scatter across ${side.name}'s field!`);
+	},
+	onSideRestart(side) {
+		if (this.effectState.layers < 4) {
+			this.effectState.layers++;
+			this.add('-sidestart', side, 'Glacial Spikes', '[up to]', this.effectState.layers);
+			this.add('message', `The Glacial Spikes grow sharper! (${this.effectState.layers}/4)`);
+		} else {
+			this.add('message', `The Glacial Spikes can’t grow any thicker!`);
+		}
+	},
+	onSwitchIn(pokemon) {
+		if (!pokemon.isActive) return;
 
+		const side = pokemon.side;
+		const spikes = side.sideConditions['glacialspikes'];
+		if (!spikes) return;
+
+		// Fire or Ice types clear the hazard
+		if (pokemon.hasType('Fire') || pokemon.hasType('Ice')) {
+			if (side.removeSideCondition('glacialspikes')) {
+				this.add('-sideend', side, 'Glacial Spikes', '[from] ability interaction');
+				this.add('message', `${pokemon.name} melted away the Glacial Spikes!`);
+			}
+			return;
+		}
+
+		const layers = spikes.layers || 0;
+		if (layers >= 4) {
+			if (!pokemon.status && pokemon.trySetStatus('frz', pokemon)) {
+				this.add('-status', pokemon, 'frz', '[from] Glacial Spikes');
+			}
+		} else if (layers >= 2) {
+			if (!pokemon.status && pokemon.trySetStatus('frb', pokemon)) {
+				this.add('-status', pokemon, 'frb', '[from] Glacial Spikes');
+			}
+		}
+	},
+	onSideEnd(side) {
+		this.add('-sideend', side, 'Glacial Spikes');
+		this.add('message', `The Glacial Spikes melted away from ${side.name}'s field!`);
+	},
+},
+frb: {
+	name: 'Frostbite',
+	effectType: 'Status',
+	onStart(pokemon) {
+		this.add('-status', pokemon, 'frb');
+		this.add('message', `${pokemon.name} was frostbitten!`);
+	},
+	onResidualOrder: 9,
+	onResidual(pokemon) {
+		this.damage(pokemon.baseMaxhp / 16);
+	},
+	onModifySpAPriority: 5,
+	onModifySpA(spa, pokemon) {
+		this.debug('Frostbite special attack reduction');
+		return this.chainModify(0.5);
+	},
 },
 };

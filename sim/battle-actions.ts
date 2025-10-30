@@ -64,8 +64,7 @@ export class BattleActions {
 			this.battle.hint("A switch failed because the Pokémon trying to switch in is already in.");
 			return false;
 		}
-
-		const side = pokemon.side;
+			const side = pokemon.side;
 		if (pos >= side.active.length) {
 			throw new Error(`Invalid switch position ${pos} / ${side.active.length}`);
 		}

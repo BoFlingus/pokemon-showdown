@@ -1220,7 +1220,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					active.switchFlag = false;
+					active.switchFlag = false;	
 				}
 			}
 			target.switchFlag = true;
@@ -1813,11 +1813,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 134,
 	},
 	honeygather: {
-		flags: {},
-		name: "Honey Gather",
-		rating: 0,
-		num: 118,
-	},
+    onResidualOrder: 28,
+    onResidualSubOrder: 2,
+    onResidual(pokemon) {
+        // 50% chance each residual turn
+        if (this.randomChance(1, 2)) {
+            if (pokemon.hp && !pokemon.item) {
+                pokemon.setItem('madhoney');
+                this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Honey Gather');
+            }
+        }
+    },
+    flags: {},
+    name: "Honey Gather",
+    rating: 2.5,
+    num: 118,
+},
 	hospitality: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
@@ -1852,7 +1863,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1,
 		num: 258,
 	},
-	hustle: {
+	hustle: {	
 		// This should be applied directly to the stat as opposed to chaining with the others
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
@@ -3878,6 +3889,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 24,
 	},
 	runaway: {
+		onTrapPokemonPriority: -10,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = pokemon.maybeTrapped = false;
+		},
 		flags: {},
 		name: "Run Away",
 		rating: 0,
@@ -5653,7 +5668,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
     },
     condition: {
       onStart(pokemon) {
-        this.effectState.counter = 1;
+        this.effectState.counter = 2;
         this.effectState.charged = false;
       },
       onResidual(pokemon) {
@@ -5778,6 +5793,7 @@ springystep: {
 			'bounce',
 			'tripleaxel', 
 			'highhorsepower',
+			'thunderouskick',
 		]);
 
 		if (!move || !kickMoves.has(move.id)) return;
@@ -5795,7 +5811,7 @@ springystep: {
 overheal: {
 	onAfterHeal(damage, target, source, effect) {
 		// Only trigger if the Pokémon is at full HP after healing
-		if (target.hp < target.maxhp) return;
+		if (target.hp = target.maxhp) return;
 
 		// Pick one of the defensive stats at random
 		const stat = this.sample(['def', 'spd']);
@@ -5907,5 +5923,259 @@ consumption: {
 	rating: 4,
 	num: 8009,
 },
-}
+vectordown: {
+  onStart(pokemon) {
+    this.add('-ability', pokemon, 'Vector Down');
+    for (const target of this.getAllActive()) {
+      if (!target.volatiles['telekinesis']) {
+        target.addVolatile('telekinesis');
+      }
+    }
+  },
+  name: "Vector Down",
+  shortDesc: "On switch-in, applies Telekinesis to all Pokémon.",
+  rating: 2,
+  num: 8010,
+},
+vectorup: {
+  onStart(pokemon) {
+    this.add('-ability', pokemon, 'Vector Up');
+    this.field.addPseudoWeather('gravity');
+  },
+  name: "Vector Up",
+  shortDesc: "On switch-in, sets Gravity.",
+  rating: 4.5,
+  num: 8011,
+},
+vectorout: {
+  onResidual(pokemon) {
+    for (const target of this.getAllActive()) {
+      if (target !== pokemon && this.canSwitch(target.side)) {
+        this.add('-ability', pokemon, 'Vector Out');
+        target.forceSwitchFlag = true;
+      }
+    }
+  },
+  name: "Vector Out",
+  shortDesc: "At end of turn, all other Pokémon are forced to switch.",
+  rating: 4.5,
+  num: 8012,
+},
+vectorin: {
+		onFoeTrapPokemon(pokemon) {
+			if (!pokemon.hasAbility('vectorin') && pokemon.isAdjacent(this.effectState.target)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon(pokemon, source) {
+			if (!source) source = this.effectState.target;
+			if (!source || !pokemon.isAdjacent(source)) return;
+			if (!pokemon.hasAbility('vectorin')) {
+				pokemon.maybeTrapped = true;
+			}
+		},
+		flags: {},
+		name: "Vector In",
+		rating: 5,
+		num: 8013,
+	},
+stagefright: {
+	name: "Stage Fright",
+	shortDesc: "After using a sound move, the user switches out.",
+	onAfterMove(pokemon, target, move) {
+		if (!move || !move.flags['sound']) return;
+		if (pokemon.fainted || move.selfSwitch) return;
 
+		// Schedule the switch after the move finishes
+		this.add('-activate', pokemon, 'ability: Stage Fright');
+		pokemon.switchFlag = true;
+	},
+	rating: 4.5,
+	num: 8014,
+},
+hitandrun: {
+	name: "Hit and Run",
+	shortDesc: "you'll never catch me now",
+	onAfterMove(pokemon, target, move) {
+		if (!move || !move.flags['contact']) return;
+		if (pokemon.fainted || move.selfSwitch) return;
+
+		// Schedule the switch after the move finishes
+		this.add('-activate', pokemon, 'ability: Hit and Run');
+		pokemon.switchFlag = true;
+	},
+	rating: 4.5,
+	num: 8015,
+},
+	colonizer: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(2, 10)) {
+					source.addVolatile('leechseed', target);
+				}
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, target, source)) {
+				if (this.randomChance(2, 10)) {
+					target.addVolatile('leechseed', source);
+				}
+			}
+		},
+		flags: {},
+		name: "Colonizer",
+		rating: 1.5,
+		num: 8016,
+	},	
+	groundzero: {
+		onStart(pokemon) {
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', ...removeAll];
+			for (const targetCondition of removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll.includes(targetCondition)) continue;
+					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', `[of] ${source}`);
+					success = true;
+				}
+			}
+			for (const sideCondition of removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', `[of] ${source}`);
+					success = true;
+				}
+			}
+			this.field.clearTerrain();
+		},
+		flags: {},
+		name: "Ground Zero",
+		rating: 3.5,
+		num: 8017,
+	},
+megalazer: {
+	onBasePowerPriority: 19,
+	onBasePower(basePower, attacker, defender, move) {
+		const beamMoves = new Set([
+			'aurorabeam',
+			'bubblebeam',
+			'chargebeam',
+			'eternabeam',
+			'ficklebeam',
+			'hyperbeam',
+			'icebeam',
+			'meteorbeam',
+			'moongeistbeam',
+			'psybeam',
+			'signalbeam',
+			'solarbeam',
+			'steelbeam', 
+			'twinbeam',
+			'tractorbeam',
+		]);
+
+		if (!move || !beamMoves.has(move.id)) return;
+			return this.chainModify(2);
+		},
+		flags: {},
+		name: "Mega Lazer",
+		rating: 3.5,
+		num: 8018
+	},
+	killdozer: {
+	name: "Killdozer",
+	rating: 3.5,
+	num: 8019,
+	shortDesc: "If this Pokémon's move KOs a target, it ignores the move's secondary effects.",
+		onAfterMove(pokemon, target, move) {
+		if (!move || !target || !target.fainted) return;
+		move.secondaries = [];
+		move.self = null;
+		move.selfBoost = null;
+		move.recoil = undefined;
+		move.drain = undefined;
+		}
+	},
+	siphoner: {
+	name: "Siphoner",
+	rating: 3.5,
+	num: 8020,
+	shortDesc: "fuck you",
+	onTryHealPriority: 1,
+		onTryHeal(damage, target, source, effect) {
+			const heals = ['drain'];
+			if (heals.includes(effect.id)) {
+				return this.chainModify([8192, 4096]);
+			}
+		},
+	},
+	seekerspores: {
+	name: "Seeker Spores",
+	shortDesc: "Powder moves used by this Pokémon ignore accuracy checks.",
+	desc: "All moves with the powder flag used by this Pokémon always hit, regardless of accuracy or evasion.",
+	onModifyMove(move, attacker, defender) {
+		if (move.flags?.powder) {
+			move.alwaysHit = true;
+		}
+	},
+	rating: 2.5,
+	num: 8021, // 
+},
+contrasticktion: {
+	name: "Contrasticktion",
+	shortDesc: "makes moves stronger if they are weak",
+	desc: "Move base power is 200 - the normnal base power",
+	onBasePower(basePower, pokemon, target, move) {
+		basePower=200-move.basePower
+		},
+	num:8022,
+},
+fatalattraction: {
+	name: "Fatal Attraction",
+	num: 8023,
+	onFoeTrapPokemon(pokemon) {
+			if (pokemon.volatiles('attract') && pokemon.isAdjacent(this.effectState.target)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon(pokemon, source) {
+			if (!source) source = this.effectState.target;
+			if (!source || !pokemon.isAdjacent(source)) return;
+			if (!pokemon.knownType || pokemon.volatiles('Attract')) {
+				pokemon.maybeTrapped = true;
+			}
+		},
+	},
+
+flusteringflames: {
+		onAnyAfterSetStatus(status, target, source, effect) {
+			if (source.baseSpecies.name !== "Rascaka") return;
+			if (source !== this.effectState.target || target === source || effect.effectType !== 'Move') return;
+			if (status.id === 'brn' || status.id === 'sch') {
+				target.addVolatile('taunt');
+			}
+		},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1 },
+		name: "Flustering Flames",
+		rating: 3,
+		num: 8024,
+	},
+partingshock: {
+	onSwitchOut(foe) {
+		foe.damage(foe.baseMaxhp / 8, foe);
+	},
+	name: "Parting Shock",
+	rating: 4,
+	num: 8025,
+},
+deadlyvenom: {
+	name: "Deadly Venom",
+	rating: 3,
+	num: 8026,
+	onAnyAfterSetStatus(status, target, source, effect) {
+
+			if (source !== this.effectState.target || target === source || effect.effectType !== 'Move') return;
+			if (status.id === 'psn') {
+				target.setStatus('tox');
+			}
+		},
+	},
+};

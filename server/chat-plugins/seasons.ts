@@ -143,6 +143,9 @@ export function generateFormatSchedule() {
 }
 
 export async function getLadderTop(format: string) {
+	// Skip network call on a private server
+	if (Config.isPrivateServer) return null;
+
 	try {
 		const results = await Net(`https://${Config.routes.root}/ladder/?format=${toID(format)}&json`).get();
 		const reply = JSON.parse(results);
@@ -154,6 +157,8 @@ export async function getLadderTop(format: string) {
 }
 
 export async function updateBadgeholders() {
+	if (Config.isPrivateServer) return; // Skip entirely on local
+
 	rollSeason();
 	const period = `${data.current.season}`;
 	if (!data.badgeholders[period]) {

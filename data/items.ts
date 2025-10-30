@@ -7721,4 +7721,26 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 8001,
 		gen: 2,
 	},
+	noxiousink: {
+		name: "Noxious Ink",
+		spritenum: 713,
+		fling: {
+			basePower: 30,
+		},
+		onModifyMovePriority: -1,
+		onModifyMove(move) {
+			if (move.flags['contact']) {
+				move.secondaries.push({
+					status: 'tox',
+				});
+			}
+		},
+		onAfterMoveSecondarySelf(target, source, move) {
+			if (move.flags['contact']) {
+				target.useItem();
+			}
+		},
+		num: 1118,
+		gen: 8,
+	},
 };

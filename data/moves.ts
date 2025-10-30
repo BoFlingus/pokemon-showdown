@@ -562,7 +562,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	armthrust: {
 		num: 292,
 		accuracy: 100,
-		basePower: 15,
+		basePower: 25,
 		category: "Physical",
 		name: "Arm Thrust",
 		pp: 20,
@@ -1552,7 +1552,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		secondary: {
 			chance: 10,
-			status: 'frz',
+			status: 'frb',
 		},
 		target: "allAdjacentFoes",
 		type: "Ice",
@@ -4908,7 +4908,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Encore",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, failencore: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, failencore: 1, sound: 1},
 		volatileStatus: 'encore',
 		condition: {
 			duration: 3,
@@ -6394,7 +6394,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		secondary: {
 			chance: 10,
-			status: 'frz',
+			status: 'frb',
 		},
 		target: "normal",
 		type: "Ice",
@@ -6439,7 +6439,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1 },
 		secondary: {
 			chance: 10,
-			status: 'frz',
+			status: 'frb',
 		},
 		target: "normal",
 		type: "Psychic",
@@ -9661,7 +9661,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: {
 			chance: 10,
-			status: 'frz',
+			status: 'frb',
 		},
 		target: "normal",
 		type: "Ice",
@@ -9707,7 +9707,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondaries: [
 			{
 				chance: 10,
-				status: 'frz',
+				status: 'frb',
 			}, {
 				chance: 10,
 				volatileStatus: 'flinch',
@@ -9747,7 +9747,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		secondary: {
 			chance: 10,
-			status: 'frz',
+			status: 'frb',
 		},
 		target: "normal",
 		type: "Ice",
@@ -12215,18 +12215,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cool",
 	},
 	metronome: {
-		num: 118,
+		num: 19234,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		name: "Metronome",
-		pp: 10,
+		name: "metronome",
+		pp: 16,
 		priority: 0,
 		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onHit(pokemon) {
     const species = this.dex.species.get(pokemon.species.id);
     const learnset = this.dex.data.Learnsets[species.id]?.learnset || {};
-    const possibleMoves = Object.keys(learnset).filter(m => m !== 'metronome');
+    const possibleMoves = Object.keys(learnset).filter(m => m !== 'bomod');
 
     if (!possibleMoves.length) return false;
 
@@ -14202,7 +14202,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: {
 			chance: 10,
-			status: 'frz',
+			status: 'frb',
 		},
 		target: "allAdjacentFoes",
 		type: "Ice",
@@ -19621,7 +19621,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cute",
 	},
 	tailwind: {
-		num: 366,
+		num: 366,	
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -20646,7 +20646,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				} else if (result === 1) {
 					target.trySetStatus('par', source);
 				} else {
-					target.trySetStatus('frz', source);
+					target.trySetStatus('frb', source);
 				}
 			},
 		},
@@ -22137,7 +22137,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, defrost: 1, nosketch: 1 },
 		secondary: {
 			chance: 10,
-			status: 'frz',
+			status: 'frb',
 		},
 		onHit(target, pokemon, move) {
 			if (pokemon.baseSpecies.baseSpecies === 'Ramnarok' && !pokemon.transformed) {
@@ -22706,7 +22706,7 @@ shishquibab: {
 			pokemon.sethp(pokemon.hp/2);
 			return damage;
 		},
-		selfdestruct: "ifHit",
+		mindBlownRecoil: true,
 		category: "Special",
 		name: "Half Gambit",
 		pp: 5,
@@ -22727,7 +22727,7 @@ shishquibab: {
 			pokemon.sethp(pokemon.hp/4);
 			return damage;
 		},
-		selfdestruct: "ifHit",
+		quarterRecoil: true,
 		category: "Special",
 		name: "Quarter Gambit",
 		pp: 5,
@@ -22751,8 +22751,8 @@ shishquibab: {
 		beforeTurnCallback(pokemon) {
 			for (const side of this.sides) {
 				if (side.hasAlly(pokemon)) continue;
-				side.addSideCondition('pursuit', pokemon);
-				const data = side.getSideConditionData('pursuit');
+				side.addSideCondition('tractorbeam', pokemon);
+				const data = side.getSideConditionData('tractorbeam');
 				if (!data.sources) {
 					data.sources = [];
 				}
@@ -22763,18 +22763,18 @@ shishquibab: {
 			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
 		},
 		onTryHit(target, pokemon) {
-			target.side.removeSideCondition('pursuit');
+			target.side.removeSideCondition('tractorbeam');
 		},
 		condition: {
 			duration: 1,
 			onBeforeSwitchOut(pokemon) {
-				this.debug('Pursuit start');
+				this.debug('tractorbeam start');
 				let alreadyAdded = false;
 				pokemon.removeVolatile('destinybond');
 				for (const source of this.effectState.sources) {
 					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
 					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
+						this.add('-activate', pokemon, 'move: Tractor Beam');
 						alreadyAdded = true;
 					}
 					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
@@ -22795,11 +22795,14 @@ shishquibab: {
 							}
 						}
 					}
-					this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
+					this.actions.runMove('tractorbeam', source, source.getLocOf(pokemon));
 				}
 			},
 		},
-		secondary: null,
+		secondary: {
+			chance: 100,
+			volatileStatus: 'tractor',
+		},
 		target: "normal",
 		type: "Psychic",
 		contestType: "Clever",
@@ -22889,4 +22892,214 @@ shishquibab: {
 		zMove: { basePower: 170 },
 		contestType: "Tough",
 	},
-}
+	hackslash: {
+		num: 8011,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		name: "Hackslash",
+		pp: 15,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1 },
+		onEffectiveness(typeMod, target, type) {
+			return 0;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
+	grimefist: {
+		num: 8012,
+		accuracy: 100,
+		basePower: 15,
+		category: "Physical",
+		name: "Grime Fist",
+		pp: 15,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		multihit: [2, 5],
+		secondary: {
+			chance: 20,
+			status: 'tox',
+		},
+		target: "normal",
+		type: "Poison",
+		contestType: "Cool",
+	},
+	ghastlywail: {
+		num: 8013,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Ghastly Wail",
+		pp: 15,
+		priority: 0,
+		flags: { sound: 1, protect: 1, mirror: 1, metronome: 1 },
+		recoil: [33, 100],
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+	nip: {
+		num: 8014,
+		accuracy: 85,
+		basePower: 20,
+		category: "Physical",
+		name: "Nip",
+		pp: 25,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Ghost",
+		contestType: "Cute",
+	},
+	wackslash: {
+		num: 8015,
+		accuracy: 100,
+		basePower: 35,
+		category: "Physical",
+		name: "Wackslash",
+		pp: 15,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1 },
+		onEffectiveness(typeMod, target, type) {
+			return 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
+	chillowisp: {
+		num: 8016,
+		accuracy: 85,
+		basePower: 0,
+		category: "Status",
+		name: "Chill-O-Wisp",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		status: 'frb',
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+		zMove: { boost: { spa: 1 } },
+		contestType: "Beautiful",
+	},
+glacialspikes: {
+	num: 8017,
+	name: "Glacial Spikes",
+	accuracy: true,
+	basePower: 0,
+	category: "Status",
+	priority: 0,
+	pp: 20,
+	flags: {reflectable: 1},
+	sideCondition: 'glacialspikes',
+	target: "foeSide",
+	type: "Ice",
+	desc: "Sets up Glacial Spikes on the opposing side. Can stack up to 4 layers. At 2+ layers, Frostbite is inflicted on switch-in; at 4 layers, Freeze is inflicted. Fire- and Ice-types clear it upon switching in.",
+	shortDesc: "Hazard. 2+ layers: Frostbite; 4: Freeze. Fire/Ice clear.",
+},
+muckmissle: {
+	num: 8018,
+	name: "Muck Missle",
+	accuracy: 90,
+	basePower: 95,
+	category: "Special",
+	priority: 0,
+	pp: 10,
+	flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+	  onHit(target, source, move) {
+    if (source.status) {
+      const statusId = source.status;
+      const success = target.trySetStatus(statusId, source, move);
+      if (success) {
+        if (statusId === 'tox' && source.statusState.toxicCounter) {
+          target.statusState.toxicCounter = source.statusState.toxicCounter;
+        }
+        if (statusId === 'slp' && source.statusState.time) {
+          target.statusState.time = source.statusState.time;
+        }
+        this.add('-message', `${source.name} transferred its ${this.dex.conditions.get(statusId).name.toLowerCase()} to ${target.name}!`);
+      } else {
+        this.add('-message', `${source.name}'s ${this.dex.conditions.get(statusId).name.toLowerCase()} faded away!`);
+      }
+      source.cureStatus();
+    }
+  },
+	target: "normal",
+	type: "Ground",
+	desc: "mucky",
+	shortDesc: "short mucky",
+},
+naptime: {
+	name: "Nap Time",
+	shortDesc: "User sleeps; all others 80% chance to sleep.",
+	category: "Status",
+	type: "Normal",
+	pp: 5,
+	priority: 0,
+	accuracy: true, // We’ll manually handle the 80% part
+	flags: {authentic: 1, protect: 1, mirror: 1},
+	target: "all", // affects everyone on the field
+	onHitField(target, source, move) {
+		// Always make the user sleep
+		if (source.hp && source.status !== 'slp') {
+			source.setStatus('slp', source);
+			this.add('-status', source, 'slp', '[from] move: Nap Time');
+		}
+
+		// Loop through everyone else on the field
+		for (const mon of this.getAllActive()) {
+			if (mon === source) continue;
+			if (!mon.hp || mon.status) continue;
+
+			if (this.randomChance(80, 100)) {
+				mon.trySetStatus('slp', source, move);
+			} else {
+				this.add('-miss', source, mon);
+			}
+		}
+	},
+	zMove: {boost: {def: 1}},
+	contestType: "Cute",
+},
+berylblast: {
+	name: "Beryl Blast",
+	shortDesc: "Form-based type/category. Always crits Pokémon with Vector.",
+	pp: 10,
+	basePower: 85,
+	accuracy: 85,
+	flags: {contact: 1, protect: 1, mirror: 1},
+	onModifyCritRatio(critRatio, source, target) {
+	},
+	onModifyMove(move, pokemon) {
+		// Adjust type and category based on form
+		switch (pokemon.species.id) {
+			case 'berriilyiongreen':
+				move.type = 'Rock';
+				move.category = 'Physical';
+				break;
+			case 'berriilyionpurple':
+				move.type = 'Rock';
+				move.category = 'Special';
+				break;
+			case 'berriilyionorange':
+				move.type = 'Dragon';
+				move.category = 'Special';
+				break;
+			case 'berriilyionpink':
+				move.type = 'Dragon';
+				move.category = 'Physical';
+				break;
+		}
+	},
+	secondary: null,
+	target: "normal",
+	contestType: "Cool",
+},
+};

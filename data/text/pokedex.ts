@@ -3782,4 +3782,196 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	brilliamax: {
 		name: "Brilliamax"
 	},
+	kangarohm: {
+		name: "Kangarohm",
+	},
+	halbird: {
+		name: "Halbird",
+	},
+	tomahawk: {
+		name: "Tomahawk",
+	},
+	cumubovine: {
+		name: "Cumubovine",
+	},
+	capyboreal: {
+		name: "Capyboreal",
+	},
+	cottmott: {
+		name: "Cottmott",
+	},
+	rottviler: {
+		name: "Rottviler",
+	},
+	kingcane: {
+		name: "Kingcane",
+	},
+	shroodoom: {
+		name: "Shroodoom",
+	},
+	choppa: {
+		name: "Choppa",
+	},
+	quakwary: {
+		name: "Quakwary",
+	},
+	batcchus: {
+		name: "Batcchus",
+	},
+	crocofagus: {
+		name: "Crocofagus",
+	},
+	drawtilus: {
+		name: "Drawtilus",
+	},
+	gobligobble: {
+		name: "Gobligobble",
+	},
+	pairomedic: {
+		name: "Pairomedic",
+	},
+	aggrimate: {
+		name: "Aggrimate",
+	},
+	ursol: {
+		name: "Ursol",
+	},
+	vooju: {
+		name: "Vooju",
+	},	
+	argaunta: {
+		name: "Argaunta",
+	},
+	aridusk: {
+		name: "Aridusk",
+	},
+	hopcorn: {
+		name: "Hopcorn",
+	},
+	capricold: {
+		name: "Capricold",
+	},
+	dormbent: {
+		name: "Dormbent",
+	},
+	bamph: {
+		name: "Bamph",
+	},
+	primallure: {
+		name: "Primallure",
+	},
+	dauntodon: {
+		name: "Dauntodon",
+	},
+	tamazuna: {
+		name: "Tamazuna",
+	},
+	grinalkin: {
+		name: "Grinalkin",
+	},
+	dendrome: {
+		name: "Dendrome",
+	},
+	beedevil: {
+		name: "Beedevil",
+	},
+	tankroach: {
+		name: "Tankroach",
+	},
+	kirring: {
+		name: "Kirring",
+	},
+	plazmitikk: {
+		name: "Plazmitikk",
+	},
+	warphront: {
+		name: "Warphront",
+	},
+	sheemo: {
+		name: "Sheemo",
+	},
+	termighty: {
+		name: "Termighty",
+	},
+	conchista: {
+		name: "Conchista",
+	},
+	preymaker: {
+		name: "Preymaker",
+	},
+	catorclysm: {
+		name: "Catorclysm",
+	},
+	tendrilitus: {
+		name: "Tendrilitus",
+	},
+	inkrab: {
+		name: "Inkrab",
+	},
+	accrab: {
+		name: "Accrab",
+	},
+	eyecrab: {
+		name: "Eyecrab",
+	},
+	faecrab: {
+		name: "Faecrab",
+	},
+	boocrab: {
+		name: "Boocrab",
+	},
+	algetate: {
+		name: "Algetate",
+	},
+	beacabode: {
+		name: "Beacabode",
+	},
+	averagon: {
+		name: "Averagon",
+	},
+	daggerbak: {
+		name: "Daggerback",
+	},
+	tumwark: {
+		name: "Tumwark",
+	},
+	terrextra: {
+		name: "Terrextra",
+	},
+	skedadull: {
+		name: "Skedadull",
+	},
+	douboom: {
+		name: "Douboom",
+	},
+	demodig: {
+		name: "Demodig",
+	},
+	alprime: {
+		name: "Alprime",
+	},
+	hydroso: {
+		name: "Hydroso",
+	},
+	lypoficer: {
+		name: "Lypoficer",
+	},
+	quillver: {
+		name: "Quillver",
+	},
+	viprex: {
+		name: "Viprex",
+	},
+	berylliongreen: {
+		name: "Beryllion-Green",
+	},
+	beryllionpurple: {
+		name: "Beryllion-Purple",
+	},
+	beryllionorange: {
+		name: "Beryllion-Orange",
+	},
+	beryllionpink: {
+		name: "Beryllion-Pink",
+	},
 };

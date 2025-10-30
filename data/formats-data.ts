@@ -37,10 +37,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 		natDexTier: "UUBL",
 	},
-	quarbuncle: {
-		tier:'ZU',
-		natDexTier: "OU",
-	},
 	charizardmegay: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -6051,6 +6047,10 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 	},
 	pokestarufopropu2: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	quarbuncle: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
